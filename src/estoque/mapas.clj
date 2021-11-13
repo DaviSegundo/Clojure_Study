@@ -104,3 +104,32 @@
      (map calc)
      (reduce +))
 
+(def pedido-2 {
+               :mochila  {:quantidade 2, :preco 80}
+               :camiseta {:quantidade 3, :preco 40}
+               :chaveiro {:quantidade 1}
+               })
+
+(defn checar-free
+  [[chave valor]]
+  (if (nil? (:preco valor))
+    (println chave "É de grátis")
+    (println chave "Não é grátis")))
+
+(->> pedido-2
+     (map checar-free))
+
+(defn gratuito?
+  [item]
+  (<= (get item :preco 0) 0))
+
+(filter gratuito? (vals pedido-2))
+
+
+(filter (fn [[chave item]] (gratuito? item)) pedido-2)
+
+(filter #(gratuito? (second %)) pedido-2)
+
+(def pago (comp not gratuito?))
+
+(filter #(pago (second %)) pedido-2)
