@@ -1,23 +1,4 @@
-(ns estoque.complex-collections
-    (:require [estoque.db :as e.db]))
-
-; Para chamar funcoes de outros arquivos
-(e.db/todos-pedidos)
-
-(group-by :usuario (e.db/todos-pedidos))
-
-(vals (group-by :usuario (e.db/todos-pedidos)))
-
-; Pouco legível
-(map count (vals (group-by :usuario (e.db/todos-pedidos))))
-
-; Problema de perder quem é o usuário
-(->> (e.db/todos-pedidos)
-     (group-by :usuario)
-     vals
-     (map count))
-
-; Implementação para manter o identificador do usuário
+(ns estoque.logic)
 
 (defn not-nil
     [x]
@@ -48,6 +29,8 @@
      :qtd-pedidos (count pedidos)
      :gasto-total (reduce + (gasto-total pedidos))})
 
-(->> (e.db/todos-pedidos)
-     (group-by :usuario)
-     (map qtdpedidos-e-gastototal-por-usuario))
+(defn resumo-por-user
+    [pedidos]
+    (->> pedidos
+         (group-by :usuario)
+         (map qtdpedidos-e-gastototal-por-usuario)))
